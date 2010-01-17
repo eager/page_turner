@@ -57,12 +57,6 @@
                     
           var target_left = b * width * -1;
 
-          console.log(a);
-          console.log(b);
-          console.log(weight);
-          console.log(target_left);
-
-
           $('#' + event.target.id).animate({
             left: target_left
           }, 1000);
