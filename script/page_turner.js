@@ -26,6 +26,8 @@
     this.set_images = function(image_array) {
       
       var margin = 2;
+      var width = that.get_image_width();
+      
       
       $("<div/>")
         .attr("id", _inner_id_string)
@@ -38,15 +40,28 @@
       
       var offset = $(_id_inner).offset();
       var max_x = offset.left;
-      var min_x = offset.left - (image_array.length - 1) * that.get_image_width();
+      var min_x = offset.left - (image_array.length - 1) * width;
       
       $(_id_inner).draggable({
         axis: 'x',
         containment: [min_x, 0, max_x, 0],
+        start: function(event, ui) {
+          $('#' + event.target.id).stop();
+        },
         stop: function(event, ui) {
           var left = ui.position.left;
-          
-          var target_left = Math.round(left / that.get_image_width()) * that.get_image_width();
+          var weight = 0.48;
+          var a = Math.abs(left / width);
+          weight = a > Math.round(a) ? weight : weight * -1;
+          var b = Math.round(a + weight);
+                    
+          var target_left = b * width * -1;
+
+          console.log(a);
+          console.log(b);
+          console.log(weight);
+          console.log(target_left);
+
 
           $('#' + event.target.id).animate({
             left: target_left
@@ -54,7 +69,7 @@
         }
       });
       
-      $(_id_inner).width(image_array.length * that.get_image_width());
+      $(_id_inner).width(image_array.length * width);
       
       that._images = image_array;
       
