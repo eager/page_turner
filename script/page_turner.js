@@ -6,49 +6,69 @@
   page_turner = window.page_turner = function(id) {
     
     var _id = id ? id : "#page_turner";
-    var _id_inner = "inner";
-    var _inner_selector = _id + " #" + _id_inner;
+    var _inner_id_string = "inner";
+    var _id_inner = _id + " #" + _inner_id_string;
     
     var that = this;
-    
-    this._append_image_tag = function(image_path, node) {
-      var image_name = image_path.split('/').pop().split('.').slice(0, -1).join('.');
-      
-      var image_tag =  '<img id="' + image_name + '" src="' + image_path + '" height="' + this.get_image_height() + '" width="' + this.get_image_width() + '" />';
-      
-      node.append(image_tag);
-    };
-    
+        
     this.set_image_height = function(height) {
-      this._image_height = height;
       
+      this._image_height = height;
       $(_id).height(height);
     };
     
     this.set_image_width = function(width) {
-      this._image_width = width;
       
+      this._image_width = width;
       $(_id).width(width);
     };
     
     this.set_images = function(image_array) {
-      $(_id).append('<div id="' + _id_inner + '"></div>');
       
-      var offset = $(_inner_selector).offset();
+      var margin = 2;
+      
+      $("<div/>")
+        .attr("id", _inner_id_string)
+        .appendTo(_id);
+      
+      $(_id_inner)
+        .css({
+          
+        });
+      
+      var offset = $(_id_inner).offset();
       var max_x = offset.left;
       var min_x = offset.left - (image_array.length - 1) * that.get_image_width();
       
-      $(_inner_selector).draggable({
+      $(_id_inner).draggable({
         axis: 'x',
-        containment: [min_x, 0, max_x, 0]
+        containment: [min_x, 0, max_x, 0],
+        stop: function(event, ui) {
+          var left = ui.position.left;
+          
+          var target_left = Math.round(left / that.get_image_width()) * that.get_image_width();
+
+          $('#' + event.target.id).animate({
+            left: target_left
+          }, 1000);
+        }
       });
       
-      $(_inner_selector).width(image_array.length * that.get_image_width());
+      $(_id_inner).width(image_array.length * that.get_image_width());
       
       that._images = image_array;
       
       $.each(that._images, function() {
-        that._append_image_tag(this, $(_inner_selector));
+        
+        var image_name = this.split('/').pop().split('.').slice(0, -1).join('.');
+                
+        $("<img/>")
+          .attr("id", image_name)
+          .attr("src", this)
+          .attr("height", that.get_image_height())
+          .attr("width", that.get_image_width())
+          .appendTo(_id_inner);
+        
       });
       
       
