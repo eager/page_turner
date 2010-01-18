@@ -23,51 +23,40 @@
       $(_id).width(width);
     };
     
-    this.set_images = function(image_array) {
+    this.add_images = function(image_array) {
       
       var margin = 2;
-      var width = that.get_image_width();
+      var image_width = that.get_image_width();
       
-      
-      $("<div/>")
-        .attr("id", _inner_id_string)
-        .appendTo(_id);
-      
-      $(_id_inner)
-        .css({
-          
-        });
-      
-      var offset = $(_id_inner).offset();
-      var max_x = offset.left;
-      var min_x = offset.left - (image_array.length - 1) * width;
-      
-      $(_id_inner).draggable({
-        axis: 'x',
-        containment: [min_x, 0, max_x, 0],
-        start: function(event, ui) {
-          $('#' + event.target.id).stop();
-        },
-        stop: function(event, ui) {
-          var left = ui.position.left;
-          var weight = 0.48;
-          var a = Math.abs(left / width);
-          weight = a > Math.round(a) ? weight : weight * -1;
-          var b = Math.round(a + weight);
-                    
-          var target_left = b * width * -1;
+      if($(_id_inner).length === 0) {
+        $("<div/>")
+          .attr("id", _inner_id_string)
+          .appendTo(_id).draggable({
+            axis: 'x',
+            start: function(event, ui) {
+              inner.stop();
+            },
+            stop: function(event, ui) {
+              var left = ui.position.left;
+              var weight = 0.48;
+              var a = Math.abs(left / image_width);
+              weight = a > Math.round(a) ? weight : weight * -1;
+              var b = Math.round(a + weight);
 
-          $('#' + event.target.id).animate({
-            left: target_left
-          }, 1000);
-        }
-      });
+              var target_left = b * image_width * -1;
+
+              inner.animate({
+                left: target_left
+              }, 1000);
+            }
+          });
+      }
       
-      $(_id_inner).width(image_array.length * width);
+      var inner = $(_id_inner);
+                  
+      that._images = that._images ? that._images + image_array : image_array;
       
-      that._images = image_array;
-      
-      $.each(that._images, function() {
+      $.each(image_array, function() {
         
         var image_name = this.split('/').pop().split('.').slice(0, -1).join('.');
                 
@@ -80,6 +69,16 @@
         
       });
       
+      var number_of_images = inner.children().length;
+      
+      var offset = inner.offset();
+      var max_x = offset.left;
+      var min_x = offset.left - (number_of_images - 1) * image_width;
+      
+      inner.draggable('option', 'containment', [min_x, 0, max_x, 0]);
+      
+      
+      inner.width(number_of_images * image_width);
       
     };
     
