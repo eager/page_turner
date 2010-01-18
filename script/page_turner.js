@@ -91,7 +91,7 @@
     };
     
     $(_id).css({
-      "margin": "0 auto",
+      "margin": "0px auto",
       "overflow": "hidden",
       "background-color": "black",
       "border": "2px solid black"
