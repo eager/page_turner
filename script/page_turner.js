@@ -54,7 +54,7 @@
       
       var inner = $(_id_inner);
                   
-      that._images = that._images ? that._images + image_array : image_array;
+      that._images = that._images ? that._images.concat(image_array) : image_array;
       
       $.each(image_array, function() {
         
@@ -76,7 +76,6 @@
       var min_x = offset.left - (number_of_images - 1) * image_width;
       
       inner.draggable('option', 'containment', [min_x, 0, max_x, 0]);
-      
       
       inner.width(number_of_images * image_width);
       
