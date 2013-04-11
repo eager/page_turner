@@ -54,7 +54,7 @@ test("add images", function() {
     
     equals(pt._images.length, 2, "internal image array should have 2 items");
     equals(inner_node.children().length, 2, "inner node should have 2 children");
-    equals(inner_node.css("width"), width * 2 + "px", "inner node's with should be 2 &times; image width");
+    equals(inner_node.css("width"), width * 2 + "px", "inner node’s width should be 2× image width");
     
     pt.add_images([
         "image_3.jpg",
@@ -64,7 +64,7 @@ test("add images", function() {
 
     equals(pt._images.length, 5, "internal image array should have 5 items");
     equals(inner_node.children().length, 5, "inner node should now have 5 children");
-    equals(inner_node.css("width"), width * 5 + "px", "inner node's with should be 2 &times; image width");
+    equals(inner_node.css("width"), width * 5 + "px", "inner node's with should be 2× image width");
     
 });
 
